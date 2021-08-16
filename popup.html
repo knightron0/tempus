@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    	<link rel="stylesheet" href="popup.css">
+        <script src="./popup.js"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+		<link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    	<title>Tempus</title>
+  	</head>
+  	<body>
+		<div id="settings">
+			<div id="density" style="height: 7%; margin-top: 7%; margin-bottom: 7%;">	
+				<div style="position: relative; width: 100%; overflow:auto; ">
+					<span class="descriptionText">Marker block size</span>
+					<span id="valueDisplay" style="float: right; margin-right: 5%; font-size: 12px; font-family: 'Nunito';">1 second</span>
+				</div>
+				<input type="range" min="1" max="20" value="1" class="slider" id="densitySlider">
+				<div style="position: relative; width: 100%; overflow:auto; ">
+					<span style="float: left; margin-left: 5%; font-size: 11px; font-family: 'Nunito'; margin-top: 1%;">1</span>
+					<span style="float: right; margin-right: 5%; font-size: 11px; font-family: 'Nunito'; margin-top: 1%">20</span>
+				</div>
+			</div>
+			<hr class="betweenSections">
+			<div id="heatmap" style="height: 7%; margin-top: 7%; margin-bottom: 7%;">	
+				<div style="position: relative; width: 100%; overflow:auto; ">
+					<span class="descriptionText">Show markers as heatmap</span>
+					<label class="switch">
+						<input class="inputCheck" type="checkbox" id="toggleHeatmap" checked>
+						<span class="circle" id="heatmapCircle"></span>
+					</label>
+				</div>
+			</div>
+			<hr class="betweenSections">
+			<div id="commentView" style="height: 7%; margin-top: 7%; margin-bottom: 7%;">	
+				<div style="position: relative; width: 100%; overflow:auto; ">
+					<span class="descriptionText">Show marker on-click comment view </span>
+					<label class="switch">
+						<input class="inputCheck" type="checkbox" id="toggleComments" checked>
+						<span class="circle"></span>
+					</label>
+				</div>
+			</div>
+			<hr class="betweenSections">
+			<div id="liveCommentView" style="height: 7%; margin-top: 7%; margin-bottom: 7%;">	
+				<div style="position: relative; width: 100%; overflow:auto; ">
+					<span class="descriptionText">Show comments replay view</span>
+					<label class="switch">
+						<input class="inputCheck" type="checkbox" id="toggleLiveComments">
+						<span class="circle"></span>
+					</label>
+				</div>
+			</div>
+			<hr class="betweenSections">
+			<div id="primaryColor" style="height: 7%; margin-top: 7%; margin-bottom: 7%;">	
+				<div style="position: relative; width: 100%; overflow:auto; ">
+					<span class="descriptionText">Marker primary color</span>
+					<div id="colorChangeContainer" style="float: right; margin-right: 5%;">
+						<div style="margin-bottom: 5px; overflow: auto;">
+							<div id="colorPreview"></div>
+							<span>#</span><input type="text" id="hexInput" placeholder="FFFF00">
+						</div>
+						<center><button type="button" id="saveButton">Set</button></center>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="otherURL">
+			Tempus is currently only supported on YouTube videos. Please visit a YouTube video to access the settings menu.
+		</div>
+		<div id="noComments">
+			Sorry, Tempus was not able to find any comments containing timestamps. Please try another YouTube video.
+		</div>
+		<div id="loadingComments">
+			Tempus is loading comments for your YouTube video right now, please wait for a little bit. 
+		</div>
+ 	</body>
+</html>
+
