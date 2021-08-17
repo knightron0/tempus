@@ -18,11 +18,11 @@ Install and enable Tempus from the Chrome Web Store [here](https://www.youtube.c
 To use Tempus, just make sure the extension has been installed and enabled in your browser. Then, you can head to any YouTube video, where the extension will collect timestamps from the comments and display them under the video progress bar. 
 
 The settings, which are accessible through the Tempus icon on the top-right of your browser, allow you to:
-1. Configure the block size of the marker (value can range between 1 and 20 seconds, default: 1)
-2. Toggle HeatMap markers (default: enabled) 
-3. Toggle the comment live replay (default: disabled)
-4. Toggle the marker on-click commment view (default: enabled)
-5. Configure the primary colour for markers (default: #ffb347)
+1. Configure the block size of the marker `default: 1` (value can range between 1 and 20 seconds)
+2. Toggle HeatMap markers `default: enabled`
+3. Toggle the comment live replay `default: disabled`
+4. Toggle the marker on-click commment view `default: enabled`
+5. Configure the primary colour for markers `default: #ffb347` ![#ffb347](https://via.placeholder.com/15/ffb347/000000?text=+)
 
 # Contributing 
 1. Clone the repository. 
