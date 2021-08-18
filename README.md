@@ -1,4 +1,4 @@
-Tempus  [![GitHub license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/knightron0/tempus/blob/main/LICENSE) [![WebStore release](https://img.shields.io/badge/install-here-brightgreen)](https://www.youtube.com/watch?v=5gX7_4qrazA) 
+Tempus  [![GitHub license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/knightron0/tempus/blob/main/LICENSE) [![WebStore release](https://img.shields.io/badge/install-here-brightgreen)](https://chrome.google.com/webstore/detail/tempus/bpdhbpeecmmglmkjfmigehaebpndmceh) 
 ===============
 
 Tempus allows you to manage and view YouTube comments with timestamps efficiently.
@@ -13,7 +13,7 @@ https://user-images.githubusercontent.com/37767310/129518303-bb97b0eb-93bf-4be1-
 4. Customize the primary colour, block size of the markers.
  
 # Usage 
-Install and enable Tempus from the Chrome Web Store [here](https://www.youtube.com/watch?v=5gX7_4qrazA)! 
+Install and enable Tempus from the Chrome Web Store [here](https://chrome.google.com/webstore/detail/tempus/bpdhbpeecmmglmkjfmigehaebpndmceh)! 
 
 To use Tempus, just make sure the extension has been installed and enabled in your browser. Then, you can head to any YouTube video, where the extension will collect timestamps from the comments and display them under the video progress bar. 
 
