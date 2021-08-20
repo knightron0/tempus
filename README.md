@@ -7,7 +7,7 @@ https://user-images.githubusercontent.com/37767310/129518303-bb97b0eb-93bf-4be1-
 
 
 # Features 
-1. View the concentration of comments using opacity of displayed markers.
+1. View concentration of comments using opacity of displayed markers.
 2. View comments containing a particular timestamp.
 3. While playing the video, view comments with timestamps like a live chat replay.
 4. Customize the primary colour, block size of the markers.
@@ -21,7 +21,7 @@ The settings, which are accessible through the Tempus icon on the top-right of y
 1. Configure the block size of the marker `default: 1` (value can range between 1 and 20 seconds)
 2. Toggle HeatMap markers `default: enabled`
 3. Toggle the comment live replay `default: disabled`
-4. Toggle the marker on-click commment view `default: enabled`
+4. Toggle the marker on-click comment view `default: enabled`
 5. Configure the primary colour for markers `default: #ffb347` ![#ffb347](https://via.placeholder.com/15/ffb347/000000?text=+)
 
 # Contributing 
