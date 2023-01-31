@@ -22,11 +22,14 @@ function editContent(content){
     return ans;
 }
 
-function makeCommentDiv(user, content, timestamp, id, isLive){
+function makeCommentDiv(user, content, timestamp, id, isLive, parity){
     const commentContainer = document.createElement('div');
-    commentContainer.style.margin = "10px";
+    commentContainer.style.padding = "10px";
     commentContainer.style.fontSize = "13px";
     commentContainer.style.fontFamily = "Roboto";
+    if (parity == 1) {
+        commentContainer.style.backgroundColor = "#1E1E1E";
+    }
     if(isLive){ 
         commentContainer.className = timestamp.toString();
     }
@@ -167,7 +170,7 @@ function onClickMarker(timestamp){
         for(let j = timestamp; j < timestamp+config.density; j++){
             if(j in commentsTime){
                 for(let i = 0; i < commentsTime[j].length; i++){
-                    let divCommentView = makeCommentDiv(commentsTime[j][i][1], commentsTime[j][i][0], -1, commentsTime[j][i][2], false);
+                    let divCommentView = makeCommentDiv(commentsTime[j][i][1], commentsTime[j][i][0], -1, commentsTime[j][i][2], false, i&1);
                     document.getElementById("panelContent").appendChild(divCommentView);
                 }
             }
@@ -381,7 +384,7 @@ vid.ontimeupdate = function() {
                 if(existingElement != undefined){
                     existingElement.remove();
                 }
-                divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true);
+                divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true, liveContent.childElementCount & 1);
                 liveContent.appendChild(divCommentView);
                 liveContent.scrollTop = liveContent.scrollHeight;
             }
