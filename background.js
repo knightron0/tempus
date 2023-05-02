@@ -1,9 +1,12 @@
+importScripts('config.js');
+console.log("asdjf")
+
 function getId(fullUrl){
 	let videoId = fullUrl.split('v=')[1];
 	let ampersandPosition = videoId.indexOf('&');
 	if(ampersandPosition != -1) {
 		videoId = videoId.substring(0, ampersandPosition);
-	}	
+	}
 	return videoId
 }
 
@@ -20,7 +23,7 @@ function getSeconds(duration){
 	let arr = [], curr = duration[0], ans = 0;
 	for(let i = 1;i<duration.length;i++){
 		if((/[a-zA-Z]/).test(duration[i]) === (/[a-zA-Z]/).test(duration[i-1])){
-			curr += duration[i];	
+			curr += duration[i];
 		} else {
 			arr.push(curr);
 			curr = duration[i];
@@ -118,7 +121,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	const apiKey = config.API_KEY;
     if(request.getComments === "True"){
 		getDuration(vId, apiKey).then(s => {
-			makeSearchTerms(s).then(sTerms => { 
+			makeSearchTerms(s).then(sTerms => {
 				fetchComments(vId, apiKey, -1, sTerms).then(result => {
 					sendResponse({"comments": filterComments(result), "videoId": vId, "videoDuration": s-1});
 				});
@@ -129,14 +132,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 chrome.runtime.onInstalled.addListener(function() {
-	chrome.storage.local.set({'heatmap': true, 'normalMarker': false, 'density': 1, 'commentView': true, 'primaryColor': [255, 179, 71], 'liveCommentView': false}, function() {
+	chrome.storage.local.set({'heatmap': true, 'normalMarker': false, 'density': 1, 'commentView': true, 'primaryColor': [255, 179, 71], 'liveCommentView': true}, function() {
 		console.log("Default values set!");
 	});
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	if(changeInfo.url){
-		const apiKey = config.API_KEY; 
+		const apiKey = config.API_KEY;
 		if(/^https:\/\/www\.youtube\.com\/watch/.test(tab.url)){
 			if(tab.active){
 				let url = tab.url;
@@ -157,9 +160,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 				});
 			}
         }
-	} 
+	}
 	return true;
 });
 
 
-  

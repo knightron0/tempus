@@ -1,10 +1,10 @@
 let config = {
-    heatmap: true, 
+    heatmap: true,
     normalMarker: false,
     density: 1,
-    commentView: true, 
+    commentView: true,
     primaryColor: [255, 179, 71],
-    liveCommentView: false
+    liveCommentView: true
 };
 let videoId = "", commentsTime = {}, freq = {}, commentsResponse = "", commentsReceived = false, videoDuration = -1;
 
@@ -30,7 +30,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
     if (parity == 1) {
         commentContainer.style.backgroundColor = "#1E1E1E";
     }
-    if(isLive){ 
+    if(isLive){
         commentContainer.className = timestamp.toString();
     }
     const username = document.createElement('div');
@@ -49,7 +49,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
     contentContainer.style.lineHeight = "16px";
     contentContainer.id = (isLive ? (id.toString()+"Live") : id.toString());
     if(content.length > 150){
-        // showless element 
+        // showless element
         const showLess = document.createElement('a');
         showLess.id = id.toString() + (isLive ? ("_aLiveLess") : ("_aLess"));
         showLess.style.color = "#ABABAA";
@@ -66,7 +66,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
         // setting up content container
         contentContainer.innerHTML = editContent(content) + " ...";
         contentContainer.appendChild(readMore);
-        // onclick functions 
+        // onclick functions
         readMore.onclick = function(){
             const x = document.getElementById((id.toString()+(isLive ? "Live" : "")));
             x.innerHTML = content +  "\n";
@@ -102,13 +102,13 @@ function makePanel(ifLive){
     if(ifLive) {
         headerHtml = `
         <div id="panelHeader" style="position: relative; width:100%; height: 60px; background-color: #1D1D1D; border-radius: 2px 2px 0px 0px;">
-            <div style="float:left; font-size: 16px; color:white; padding-top: 5%; padding-bottom:5%; padding-left:16px; font-family: 'Roboto';">Comments Replay</div> 
+            <div style="float:left; font-size: 16px; color:white; padding-top: 5%; padding-bottom:5%; padding-left:16px; font-family: 'Roboto';">Comments Replay</div>
             <button id="liveCommentPanelButton" style="position: relative; border:none; float:right; top: 15%; background-color: transparent; outline: none; color: white; font-size: 35px; margin-right: 2%; cursor:pointer;">×</button>
         </div>`
     } else {
         headerHtml = `
         <div id="panelHeader" style="position: relative; width:100%; height: 60px; background-color: #1D1D1D; border-radius: 2px 2px 0px 0px;">
-            <div style="float:left; font-size: 16px; color:white; padding-top: 5%; padding-bottom:5%; padding-left:16px; font-family: 'Roboto';">Comments</div> 
+            <div style="float:left; font-size: 16px; color:white; padding-top: 5%; padding-bottom:5%; padding-left:16px; font-family: 'Roboto';">Comments</div>
             <div id="timestampView" style="position: relative; float:left; background-color: #24283A;font-size: 16px; color: #3EA6FF; top: 30%; margin-left: 2%; padding: 2px 5px 2px 5px; border-radius: 3px;">1:15:30</div>
             <button id="commentPanelButton" style="position: relative; border:none; float:right; top: 15%; background-color: transparent; outline: none; color: white; font-size: 35px; margin-right: 2%; cursor:pointer;">×</button>
         </div>`
@@ -136,7 +136,7 @@ function getStamp(seconds){
     if(hours == 0){
         return (secs < 10) ? (mins.toString() + ":0" + secs.toString()) : (mins.toString() + ":" + secs.toString());
     } else {
-        return hours.toString() + ":" + ((mins < 10) ? ("0" + mins.toString()): (mins.toString())) + ":" + ((secs < 10) ? ("0" + secs.toString()): (secs.toString())) 
+        return hours.toString() + ":" + ((mins < 10) ? ("0" + mins.toString()): (mins.toString())) + ":" + ((secs < 10) ? ("0" + secs.toString()): (secs.toString()))
     }
 }
 
@@ -195,7 +195,7 @@ function makeMarkers(response, mxHeight, ifHeatmap){
         let freqTotal = 0;
         for(let j = i; j < i+config.density; j++){
             freqTotal += (j in freq) ? freq[j] : 0;
-        }   
+        }
         mx = Math.max(freqTotal, mx);
     }
     for(let i = 0; i <= totalSeconds; i += config.density){
@@ -208,12 +208,12 @@ function makeMarkers(response, mxHeight, ifHeatmap){
         }
         const num = i, bar = document.createElement("div");
         bar.style.position = "absolute";
-        bar.style.width = (w*config.density).toString()+"px";        
+        bar.style.width = (w*config.density).toString()+"px";
         bar.style.height = mxHeight.toString() + "px";
         // bar.style.top = (-mxHeight).toString() + "px";
         bar.style.background = (ifHeatmap ? makeRGBA(mx, freqNum) : makeRGBA(1, 1));
         bar.style.borderRadius = "0% 0% 3px 3px";
-        bar.style.left = (w*num).toString()+"px";        
+        bar.style.left = (w*num).toString()+"px";
         bar.style.cursor = "pointer";
         bar.className = (ifHeatmap ? "heatmapBar" : "normalMarker");
         bar.id = num.toString();
@@ -240,7 +240,7 @@ function clearAllElements(){
     }
 }
 
-function toggleClass(c){	
+function toggleClass(c){
 	let divs = document.getElementsByClassName(c);
 	for(let i = 0;i<divs.length;i++){
         divs[i].style.visibility = (divs[i].style.visibility == "hidden") ? "visible" : "hidden";
@@ -301,7 +301,7 @@ chrome.storage.local.get(['heatmap', 'normalMarker', 'density', 'commentView', '
     config.liveCommentView = result.liveCommentView;
 });
 
-chrome.runtime.sendMessage({getComments: "True"}, function(response) {	
+chrome.runtime.sendMessage({getComments: "True"}, function(response) {
     freq = {};
     clearAllElements();
     videoId = response["videoId"];
@@ -376,17 +376,23 @@ chrome.runtime.onMessage.addListener(
 const vid = document.getElementsByClassName("video-stream html5-main-video")[0];
 vid.ontimeupdate = function() {
     const liveContent = document.getElementById("livePanelContent");
-    const timestamp = Math.floor(vid.currentTime);
-    if(liveContent != undefined && (liveContent.childElementCount === 0 || liveContent.lastElementChild.className != timestamp.toString()) && config.liveCommentView){
-        if(timestamp in commentsTime){
-            for(let i = 0; i < commentsTime[timestamp].length; i++){
-                const existingElement = document.getElementById(commentsTime[timestamp][i][2]+"Live");
-                if(existingElement != undefined){
-                    existingElement.remove();
+    const currentTimestamp = Math.floor(vid.currentTime);
+    if(liveContent != undefined && (liveContent.childElementCount === 0 || liveContent.lastElementChild.className != currentTimestamp.toString()) && config.liveCommentView){
+        let prevTime = -1;
+        if (liveContent.childElementCount != 0) {
+            prevTime = parseInt(liveContent.lastElementChild.className);
+        }
+        for (let timestamp = prevTime + 1; timestamp < currentTimestamp; timestamp++) {
+            if(timestamp in commentsTime){
+                for(let i = 0; i < commentsTime[timestamp].length; i++){
+                    const existingElement = document.getElementById(commentsTime[timestamp][i][2]+"Live");
+                    if(existingElement != undefined){
+                        existingElement.remove();
+                    }
+                    divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true, liveContent.childElementCount & 1);
+                    liveContent.appendChild(divCommentView);
+                    liveContent.scrollTop = liveContent.scrollHeight;
                 }
-                divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true, liveContent.childElementCount & 1);
-                liveContent.appendChild(divCommentView);
-                liveContent.scrollTop = liveContent.scrollHeight;
             }
         }
     }
