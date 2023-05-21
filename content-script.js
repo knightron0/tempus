@@ -11,7 +11,7 @@ let videoId = "", commentsTime = {}, freq = {}, commentsResponse = "", commentsR
 function editContent(content){
     const splitContent = content.split(" ");
     let charCount = 0, ans = "";
-    for(let i= 0; i < splitContent.length; i++){
+    for (let i= 0; i < splitContent.length; i++){
         if(charCount + splitContent[i].length > 150){
             break;
         }
@@ -30,7 +30,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
     if (parity == 1) {
         commentContainer.style.backgroundColor = "#1E1E1E";
     }
-    if(isLive){
+    if (isLive) {
         commentContainer.className = timestamp.toString();
     }
     const username = document.createElement('div');
@@ -48,7 +48,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
     contentContainer.style.whiteSpace = "pre-wrap";
     contentContainer.style.lineHeight = "16px";
     contentContainer.id = (isLive ? (id.toString()+"Live") : id.toString());
-    if(content.length > 150){
+    if (content.length > 150) {
         // showless element
         const showLess = document.createElement('a');
         showLess.id = id.toString() + (isLive ? ("_aLiveLess") : ("_aLess"));
@@ -93,13 +93,13 @@ function makePanel(ifLive){
     panelContainer.style.marginBottom = "10px";
     panelContainer.style.borderRadius = "2px";
     panelContainer.style.display = "none";
-    if(ifLive && config.liveCommentView){
+    if (ifLive && config.liveCommentView) {
         panelContainer.style.display = "block";
     }
     panelContainer.style.border = "1px solid #313031"
     // building the header div
     let headerHtml = "";
-    if(ifLive) {
+    if (ifLive) {
         headerHtml = `
         <div id="panelHeader" style="position: relative; width:100%; height: 60px; background-color: #1D1D1D; border-radius: 2px 2px 0px 0px;">
             <div style="float:left; font-size: 16px; color:white; padding-top: 5%; padding-bottom:5%; padding-left:16px; font-family: 'Roboto';">Comments Replay</div>
@@ -387,8 +387,8 @@ vid.ontimeupdate = function() {
             if(timestamp in commentsTime){
                 for(let i = 0; i < commentsTime[timestamp].length; i++){
                     const existingElement = document.getElementById(commentsTime[timestamp][i][2]+"Live");
-                    if(existingElement != undefined){
-                        existingElement.remove();
+                    if ((existingElement != undefined) && (existingElement.parentElement != undefined)) {
+                        existingElement.parentElement.remove();
                     }
                     const placeholderImg = document.getElementById("placeholderImg");
                     if (placeholderImg != undefined) {
