@@ -47,7 +47,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
     contentContainer.style.marginLeft = "8px";
     contentContainer.style.whiteSpace = "pre-wrap";
     contentContainer.style.lineHeight = "16px";
-    contentContainer.id = (isLive ? (id.toString()+"Live") : id.toString());
+    contentContainer.id = (isLive ? (id.toString() + timestamp.toString() + "Live") : (id.toString() + timestamp.toString()));
     if (content.length > 150) {
         // showless element
         const showLess = document.createElement('a');
@@ -68,12 +68,12 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
         contentContainer.appendChild(readMore);
         // onclick functions
         readMore.onclick = function(){
-            const x = document.getElementById((id.toString()+(isLive ? "Live" : "")));
+            const x = document.getElementById((id.toString() + timestamp.toString() + (isLive ? "Live" : "")));
             x.innerHTML = content +  "\n";
             x.appendChild(showLess);
         }
         showLess.onclick = function(){
-            const x = document.getElementById((id.toString()+(isLive ? "Live" : "")));
+            const x = document.getElementById((id.toString() + timestamp.toString() + (isLive ? "Live" : "")));
             x.innerHTML = editContent(content) + " ...";
             x.appendChild(readMore);
         }
@@ -386,7 +386,7 @@ vid.ontimeupdate = function() {
         for (let timestamp = prevTime + 1; timestamp < currentTimestamp; timestamp++) {
             if(timestamp in commentsTime){
                 for(let i = 0; i < commentsTime[timestamp].length; i++){
-                    const existingElement = document.getElementById(commentsTime[timestamp][i][2]+"Live");
+                    const existingElement = document.getElementById(commentsTime[timestamp][i][2] + timestamp.toString() + "Live");
                     if ((existingElement != undefined) && (existingElement.parentElement != undefined)) {
                         existingElement.parentElement.remove();
                     }
