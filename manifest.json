@@ -28,5 +28,15 @@
       "matches": ["https://www.youtube.com/watch?*"],
       "js": ["content-script.js"]
     }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "/assets/placeholder.png"
+      ],
+      "matches": [
+        "https://www.youtube.com/*"
+      ]
+    }
   ]
 }

@@ -86,7 +86,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
 }
 
 function makePanel(ifLive){
-    let allPanels = document.getElementById("related"), pAds = document.getElementById("player-ads"), panelContainer = document.createElement("div");
+    let allPanels = document.getElementById("secondary-inner"), panelContainer = document.createElement("div");
     panelContainer.id = (ifLive ? "liveCommentView" : "commentView");
     panelContainer.style.backgroundColor = "black";
     panelContainer.style.maxHeight = "400px";
@@ -113,11 +113,12 @@ function makePanel(ifLive){
             <button id="commentPanelButton" style="position: relative; border:none; float:right; top: 15%; background-color: transparent; outline: none; color: white; font-size: 35px; margin-right: 2%; cursor:pointer;">×</button>
         </div>`
     }
+    const placeholderURL = chrome.runtime.getURL('assets/placeholder.png');
     panelContainer.innerHTML = headerHtml;
     // building the content div
-    const contentHtml = (ifLive ? `<div id="livePanelContent" style="position: relative; width:100%; height: 340px; overflow-y: auto;"></div>`: `<div id="panelContent" style="position: relative; width:100%; max-height: 340px; overflow-y: auto;"></div>`);
+    const contentHtml = (ifLive ? `<div id="livePanelContent" style="position: relative; width:100%; height: 340px; overflow-y: auto;"><img id="placeholderImg" src='` + placeholderURL + `' style="width:40%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity:70%; display: block; user-select: none; -webkit-user-drag: none;"></img></div>`: `<div id="panelContent" style="position: relative; width:100%; max-height: 340px; overflow-y: auto;"></div>`);
     panelContainer.innerHTML += contentHtml;
-    allPanels.insertBefore(panelContainer, pAds);
+    allPanels.insertBefore(panelContainer, allPanels.firstChild);
 }
 
 function getSeconds(timestamp){
@@ -377,9 +378,9 @@ const vid = document.getElementsByClassName("video-stream html5-main-video")[0];
 vid.ontimeupdate = function() {
     const liveContent = document.getElementById("livePanelContent");
     const currentTimestamp = Math.floor(vid.currentTime);
-    if(liveContent != undefined && (liveContent.childElementCount === 0 || liveContent.lastElementChild.className != currentTimestamp.toString()) && config.liveCommentView){
+    if(liveContent != undefined && (liveContent.getElementsByTagName('div').length === 0 || liveContent.lastElementChild.className != currentTimestamp.toString()) && config.liveCommentView){
         let prevTime = -1;
-        if (liveContent.childElementCount != 0) {
+        if (liveContent.getElementsByTagName('div').length !== 0) {
             prevTime = parseInt(liveContent.lastElementChild.className);
         }
         for (let timestamp = prevTime + 1; timestamp < currentTimestamp; timestamp++) {
@@ -389,7 +390,11 @@ vid.ontimeupdate = function() {
                     if(existingElement != undefined){
                         existingElement.remove();
                     }
-                    divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true, liveContent.childElementCount & 1);
+                    const placeholderImg = document.getElementById("placeholderImg");
+                    if (placeholderImg != undefined) {
+                        placeholderImg.style.display = 'none';
+                    }
+                    divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true, liveContent.getElementsByTagName('div').length & 1);
                     liveContent.appendChild(divCommentView);
                     liveContent.scrollTop = liveContent.scrollHeight;
                 }

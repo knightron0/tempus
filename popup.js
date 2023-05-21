@@ -15,7 +15,7 @@ function componentToHex(c) {
     var hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
 }
-  
+
 function rgbToHex(r, g, b) {
     return componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     saveButton.addEventListener('click', function(){
         const selectedHex = document.getElementById("hexInput").value;
         if(!isValidHex("#"+selectedHex)){
-            document.getElementById("hexInput").value = "";    
+            document.getElementById("hexInput").value = "";
         } else {
             document.getElementById("colorPreview").style.backgroundColor = "#"+selectedHex;
             document.getElementById("hexInput").placeholder = selectedHex
