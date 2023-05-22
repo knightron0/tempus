@@ -262,6 +262,7 @@ function initialize(response){
     freq = {};
     for(let i = 0;i<response.length;i++){
         const num = getSeconds(response[i]["time"]);
+        response[i]["text"] = response[i]["text"].replace(/\n\n+/g, '\n\n');
         freq[num] = (num in freq) ? freq[num]+1 : 1;
     }
 	makeMarkers(response, 10, true);
