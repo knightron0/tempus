@@ -1,5 +1,4 @@
 importScripts('config.js');
-console.log("asdjf")
 
 function getId(fullUrl){
 	let videoId = fullUrl.split('v=')[1];
@@ -56,16 +55,7 @@ function getDuration(vId, apiKey){
 
 function makeSearchTerms(tSec){
 	return new Promise((resolve, reject) => {
-		let urlsTerms = "&searchTerms=";
-		let cnt = 0;
-		for(let i = 0;i<=parseInt(tSec/60);i++){
-			if(i != parseInt(tSec/60)) {
-				urlsTerms += getStamp(i*60) + "%20%7C%20";
-			} else {
-				urlsTerms += getStamp(i*60);
-			}
-			cnt++;
-		}
+		let urlsTerms = "";
 		resolve(urlsTerms);
 	});
 }
