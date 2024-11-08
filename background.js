@@ -1,5 +1,4 @@
 importScripts('config.js');
-console.log("asdjf")
 
 function getId(fullUrl){
 	let videoId = fullUrl.split('v=')[1];
@@ -54,26 +53,10 @@ function getDuration(vId, apiKey){
 	});
 }
 
-function makeSearchTerms(tSec){
-	return new Promise((resolve, reject) => {
-		let urlsTerms = "&searchTerms=";
-		let cnt = 0;
-		for(let i = 0;i<=parseInt(tSec/60);i++){
-			if(i != parseInt(tSec/60)) {
-				urlsTerms += getStamp(i*60) + "%20%7C%20";
-			} else {
-				urlsTerms += getStamp(i*60);
-			}
-			cnt++;
-		}
-		resolve(urlsTerms);
-	});
-}
-
-function makeUrl(videoId, apiKey, pageToken, sTerms){
+function makeUrl(videoId, apiKey, pageToken){
 	const fields = "&fields=items%28snippet%2FtopLevelComment%2Fsnippet%2FtextOriginal%2C%20snippet%2FtopLevelComment%2Fsnippet%2FauthorDisplayName%2Csnippet%2FtopLevelComment%2Fid%29%2CnextPageToken";
 	let url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=";
-	url += videoId.toString() + "&maxResults=100" + fields + "&key=" + apiKey.toString() + sTerms;
+	url += videoId.toString() + "&maxResults=100" + fields + "&key=" + apiKey.toString();
 	if(pageToken != -1){
 		url += "&pageToken=" + pageToken.toString();
 	}
@@ -100,14 +83,14 @@ function filterComments(comments){
 	return res;
 }
 
-function fetchComments(vId, apiKey, pageToken, sTerms){
+function fetchComments(vId, apiKey, pageToken){
 	return new Promise((resolve, reject) => {
-		fetch(makeUrl(vId, apiKey, pageToken, sTerms)).then(r => r.text()).then(r => {
+		fetch(makeUrl(vId, apiKey, pageToken)).then(r => r.text()).then(r => {
 			let final = JSON.parse(r);
 			if(!("nextPageToken" in final)){
 				resolve(final["items"]);
 			} else {
-				fetchComments(vId, apiKey, final["nextPageToken"], sTerms).then(r => {
+				fetchComments(vId, apiKey, final["nextPageToken"]).then(r => {
 					resolve(final["items"].concat(r));
 				});
 			}
@@ -121,10 +104,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	const apiKey = config.API_KEY;
     if(request.getComments === "True"){
 		getDuration(vId, apiKey).then(s => {
-			makeSearchTerms(s).then(sTerms => {
-				fetchComments(vId, apiKey, -1, sTerms).then(result => {
-					sendResponse({"comments": filterComments(result), "videoId": vId, "videoDuration": s-1});
-				});
+			fetchComments(vId, apiKey, -1).then(result => {
+				sendResponse({"comments": filterComments(result), "videoId": vId, "videoDuration": s-1});
 			});
 		});
     }
@@ -148,10 +129,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 					response = response || {}
 					if(response.status){
 						getDuration(vId, apiKey).then(s => {
-							makeSearchTerms(s).then(sTerms => {
-								fetchComments(vId, apiKey, -1, sTerms).then(result => {
-									chrome.tabs.sendMessage(tabId, {tabUpdated: true, comments: filterComments(result), videoId: vId, videoDuration: s-1}, function(response) {});
-								});
+							fetchComments(vId, apiKey, -1).then(result => {
+								chrome.tabs.sendMessage(tabId, {tabUpdated: true, comments: filterComments(result), videoId: vId, videoDuration: s-1}, function(response) {});
 							});
 						});
 					} else {
