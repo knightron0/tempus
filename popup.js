@@ -98,6 +98,45 @@ document.addEventListener('DOMContentLoaded', function() {
             chrome.tabs.sendMessage(tabs[0].id, {densityChange: true, densityValue: val}, function(response) {});
         });
     }
+
+    // Retrieve and display saved API key, if available
+    chrome.storage.local.get(['apiKey'], function(result) {
+        let savedApiKey = result.apiKey
+        if (savedApiKey) {
+            chrome.storage.local.get(['originalApiKey'], function(result) {
+                const originalApiKey = result.originalApiKey
+                if (savedApiKey === originalApiKey) {
+                    document.getElementById('apiKeyInput').value = ''; // Keep input field blank
+                } else {
+                    document.getElementById('apiKeyInput').value = savedApiKey;
+                }
+            })
+        }
+    });
+
+    // Save API key on button click
+    document.getElementById('saveApiKeyButton').addEventListener('click', function() {
+        const apiKey = document.getElementById('apiKeyInput').value;
+        if (apiKey) {
+            chrome.storage.local.set({ 'apiKey': apiKey }, function() {
+                alert('API Key saved successfully!');
+            });
+        } else {
+            alert('Please enter a valid API Key.');
+        }
+    });
+
+    // Reset API key to the original key on button click (without showing it)
+    document.getElementById('revertApiKeyButton').addEventListener('click', function() {
+        // Retrieve the original API key from storage
+        chrome.storage.local.get(['originalApiKey'], function(result) {
+            const originalApiKey = result.originalApiKey
+            chrome.storage.local.set({ 'apiKey': originalApiKey }, function() {
+                document.getElementById('apiKeyInput').value = ''; // Keep input field blank after reset
+                alert('API Key reset!');
+            });
+        });
+    });
 });
 
 window.onload = function() {
