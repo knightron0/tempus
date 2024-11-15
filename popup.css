@@ -164,9 +164,11 @@ input:checked + .circle:before {
 	font-size: 13px;
 }
 
-.inputButtonContainer {
+.inputToggleContainer {
     display: flex;
     align-items: center;
+	justify-content: space-between;
+    width: 100%;
 }
 
 #apiKeyInput {
@@ -175,51 +177,8 @@ input:checked + .circle:before {
     padding: 5px;
     border-radius: 5px;
     outline: none;
-    margin: 10px;
-}
-
-#saveApiKeyButton {
-    border: none;
-    background-color: #5191F2;
-    font-size: 10px;
-    padding: 5px 10px;
-    margin-left: 10px;
-    border-radius: 40px;
-    color: white;
-    font-family: 'Inter';
-    cursor: pointer;
-}
-
-#saveApiKeyButton:hover {
-    background-color: #5174F2;
-}
-
-#revertApiKeyButton {
-    border: none;
-    background-color: #5191F2;
-    font-size: 10px;
-    padding: 5px 10px;
-    margin-left: 10px;
-    border-radius: 40px;
-    color: white;
-    font-family: 'Inter';
-    cursor: pointer;
-}
-
-#revertApiKeyButton:hover {
-    background-color: #5174F2;
-}
-
-#apiKeySavedMessage {
-	font-family: 'Inter';
 	margin: 10px;
-	font-size: 13px;
-	display: none;
-}
-
-#apiKeyRevertedMessage {
-	font-family: 'Inter';
-	margin: 10px;
-	font-size: 13px;
-	display: none;
+	flex: 1;
+    width: auto;
+    max-width: 150px;
 }

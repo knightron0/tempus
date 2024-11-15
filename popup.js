@@ -114,28 +114,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Save API key on button click
-    document.getElementById('saveApiKeyButton').addEventListener('click', function() {
-        const apiKey = document.getElementById('apiKeyInput').value;
-        if (apiKey) {
-            chrome.storage.local.set({ 'apiKey': apiKey }, function() {
-                alert('API Key saved successfully!');
-            });
-        } else {
-            alert('Please enter a valid API Key.');
-        }
+    // Retrieve the current toggle state on load
+    chrome.storage.local.get(['useCustomApiKey'], (result) => {
+        document.getElementById('toggleApiKey').checked = result.useCustomApiKey || false;
     });
 
-    // Reset API key to the original key on button click (without showing it)
-    document.getElementById('revertApiKeyButton').addEventListener('click', function() {
-        // Retrieve the original API key from storage
-        chrome.storage.local.get(['originalApiKey'], function(result) {
-            const originalApiKey = result.originalApiKey
-            chrome.storage.local.set({ 'apiKey': originalApiKey }, function() {
-                document.getElementById('apiKeyInput').value = ''; // Keep input field blank after reset
-                alert('API Key reset!');
+    // Event listener for toggle switch to save state
+    document.getElementById('toggleApiKey').addEventListener('change', (event) => {
+        const useCustomApiKey = event.target.checked;
+        
+        if (useCustomApiKey) {
+            const apiKey = document.getElementById('apiKeyInput').value;
+            if (apiKey) {
+                chrome.storage.local.set({ 'useCustomApiKey': useCustomApiKey });
+                chrome.storage.local.set({ 'apiKey': apiKey }, function() {
+                    alert('API Key saved successfully!');
+                });
+            } else {
+                alert('Please enter a valid API Key.');
+                event.target.checked = false;
+            }
+        } else {
+            chrome.storage.local.set({ 'useCustomApiKey': useCustomApiKey });
+            // Retrieve the original API key from storage
+            chrome.storage.local.get(['originalApiKey'], function(result) {
+                const originalApiKey = result.originalApiKey
+                chrome.storage.local.set({ 'apiKey': originalApiKey }, function() {
+                    document.getElementById('apiKeyInput').value = ''; // Keep input field blank after reset
+                    alert('API Key reset!');
+                });
             });
-        });
+        }
     });
 });
 

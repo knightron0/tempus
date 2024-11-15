@@ -123,6 +123,10 @@ chrome.runtime.onInstalled.addListener(function() {
 		}
 	})
 
+	chrome.storage.local.set({'useCustomApiKey': false}, function() {
+       
+    });
+
 	chrome.storage.local.set({'originalApiKey': config.API_KEY}, function() {
        
     });

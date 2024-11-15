@@ -67,11 +67,13 @@
 			<hr class="betweenSections">
 			<div id="apiKeySection">	
 				<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-					<span class="descriptionText">YouTube API Key</span>
-					<div class="inputButtonContainer">
+					<span class="descriptionText">API Key (optional)</span>
+					<div class="inputToggleContainer">
 						<input type="text" id="apiKeyInput" placeholder="Enter API Key">
-						<button id="saveApiKeyButton">Save</button>
-						<button id="revertApiKeyButton">Reset</button>
+						<label class="switch">
+							<input type="checkbox" id="toggleApiKey">
+							<span class="circle"></span>
+						</label>
 					</div>
 				</div>
 			</div>
