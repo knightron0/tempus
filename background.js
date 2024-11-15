@@ -116,20 +116,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 chrome.runtime.onInstalled.addListener(function() {
+	// Remove in case had own key but re-installing the extension on same device.
 	chrome.storage.local.remove(['apiKey'],function() {
 		var error = chrome.runtime.lastError;
 		if (error) {
 			console.error(error);
 		}
 	})
-
-	chrome.storage.local.set({'useCustomApiKey': false}, function() {
-       
-    });
-
-	chrome.storage.local.set({'originalApiKey': config.API_KEY}, function() {
-       
-    });
 
 	chrome.storage.local.set({'heatmap': true, 'normalMarker': false, 'density': 1, 'commentView': true, 'primaryColor': [255, 179, 71], 'liveCommentView': true}, function() {
 		console.log("Default values set!");

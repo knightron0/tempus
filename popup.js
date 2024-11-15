@@ -99,51 +99,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Retrieve and display saved API key, if available
+    var apiKeyInput = document.getElementById("apiKeyInput");
+    var apiKeyToggle = document.getElementById("toggleApiKey");
+    // Load and set API key toggle state
     chrome.storage.local.get(['apiKey'], function(result) {
-        let savedApiKey = result.apiKey
-        if (savedApiKey) {
-            chrome.storage.local.get(['originalApiKey'], function(result) {
-                const originalApiKey = result.originalApiKey
-                if (savedApiKey === originalApiKey) {
-                    document.getElementById('apiKeyInput').value = ''; // Keep input field blank
-                } else {
-                    document.getElementById('apiKeyInput').value = savedApiKey;
-                }
-            })
+        if (result.apiKey) {
+            apiKeyToggle.checked = true;
+            apiKeyInput.value = result.apiKey;
+        } else {
+            apiKeyToggle.checked = false;
+            apiKeyInput.disabled = true;
+            apiKeyInput.value = "";
         }
     });
 
-    // Retrieve the current toggle state on load
-    chrome.storage.local.get(['useCustomApiKey'], (result) => {
-        document.getElementById('toggleApiKey').checked = result.useCustomApiKey || false;
+    // Toggle API key usage
+    apiKeyToggle.addEventListener("change", function() {
+        if (apiKeyToggle.checked) {
+            chrome.storage.local.set({ apiKey: apiKeyInput.value });
+            apiKeyInput.disabled = false;
+        } else {
+            chrome.storage.local.remove("apiKey");
+            apiKeyInput.disabled = true;
+            apiKeyInput.value = ""; // Revert to default display
+        }
     });
 
-    // Event listener for toggle switch to save state
-    document.getElementById('toggleApiKey').addEventListener('change', (event) => {
-        const useCustomApiKey = event.target.checked;
-        
-        if (useCustomApiKey) {
-            const apiKey = document.getElementById('apiKeyInput').value;
-            if (apiKey) {
-                chrome.storage.local.set({ 'useCustomApiKey': useCustomApiKey });
-                chrome.storage.local.set({ 'apiKey': apiKey }, function() {
-                    alert('API Key saved successfully!');
-                });
-            } else {
-                alert('Please enter a valid API Key.');
-                event.target.checked = false;
-            }
-        } else {
-            chrome.storage.local.set({ 'useCustomApiKey': useCustomApiKey });
-            // Retrieve the original API key from storage
-            chrome.storage.local.get(['originalApiKey'], function(result) {
-                const originalApiKey = result.originalApiKey
-                chrome.storage.local.set({ 'apiKey': originalApiKey }, function() {
-                    document.getElementById('apiKeyInput').value = ''; // Keep input field blank after reset
-                    alert('API Key reset!');
-                });
-            });
+    // Save API key on input change if toggle is active
+    apiKeyInput.addEventListener("input", function() {
+        if (apiKeyToggle.checked) {
+            chrome.storage.local.set({ apiKey: apiKeyInput.value });
         }
     });
 });
