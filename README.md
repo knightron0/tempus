@@ -41,5 +41,13 @@ let config = {
 
 All contributions are welcome! You can add functionality, fix bugs, or make any other improvements. When you're done, [submit a pull request](https://github.com/knightron0/tempus/pulls)!
 
+# Entering An API Key
+You can use your own YouTube API key with Tempus. 
+
+1. Sign into [Google Cloud Console](https://console.cloud.google.com/) with your Google account and create a project.
+2. Go to the [Enabled APIs page](https://console.cloud.google.com/apis/enabled) and select the project. Search for the [YouTube Data v3 API](https://console.cloud.google.com/apis/api/youtube.googleapis.com/) and enable it.
+3. In the [Credentials page](https://console.cloud.google.com/apis/credentials), select the API Key option. Save and copy the secret key.
+4. Open the extension and paste in your key. Toggle on to use the key and refresh the tab.
+
 # License
 The code is licensed under the MIT license.

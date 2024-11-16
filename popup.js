@@ -98,6 +98,44 @@ document.addEventListener('DOMContentLoaded', function() {
             chrome.tabs.sendMessage(tabs[0].id, {densityChange: true, densityValue: val}, function(response) {});
         });
     }
+
+    // Load and set API key toggle state
+    var apiKeyInputs = document.getElementsByClassName("apiKeyInput");
+    var apiKeyToggles = document.getElementsByClassName("toggleApiKey");
+
+    Array.from(apiKeyToggles).forEach(function(apiKeyToggle, index) {
+        var apiKeyInput = apiKeyInputs[index];
+
+        chrome.storage.local.get(['apiKey'], function(result) {
+            if (result.apiKey) {
+                apiKeyToggle.checked = true;
+                apiKeyInput.value = result.apiKey;
+            } else {
+                apiKeyToggle.checked = false;
+                apiKeyInput.disabled = true;
+                apiKeyInput.value = "";
+            }
+        });
+
+        // Toggle API key usage
+        apiKeyToggle.addEventListener("change", function() {
+            if (apiKeyToggle.checked) {
+                chrome.storage.local.set({ apiKey: apiKeyInput.value });
+                apiKeyInput.disabled = false;
+            } else {
+                chrome.storage.local.remove("apiKey");
+                apiKeyInput.disabled = true;
+                apiKeyInput.value = ""; // Revert to default display
+            }
+        });
+
+        // Save API key on input change if toggle is active
+        apiKeyInput.addEventListener("input", function() {
+            if (apiKeyToggle.checked) {
+                chrome.storage.local.set({ apiKey: apiKeyInput.value });
+            }
+        });
+    });
 });
 
 window.onload = function() {

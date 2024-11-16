@@ -101,18 +101,29 @@ function fetchComments(vId, apiKey, pageToken){
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   	let url = sender.tab.url;
   	let vId = getId(url);
-	const apiKey = config.API_KEY;
-    if(request.getComments === "True"){
-		getDuration(vId, apiKey).then(s => {
-			fetchComments(vId, apiKey, -1).then(result => {
-				sendResponse({"comments": filterComments(result), "videoId": vId, "videoDuration": s-1});
-			});
-		});
-    }
+	// Retrieve API key from storage, then use it in the API calls
+    chrome.storage.local.get(['apiKey'], function(result) {
+		const apiKey = result.apiKey || config.API_KEY; // Fallback to config.API_KEY if not set
+		if(request.getComments === "True"){
+			getDuration(vId, apiKey).then(s => {
+				fetchComments(vId, apiKey, -1).then(result => {
+					sendResponse({"comments": filterComments(result), "videoId": vId, "videoDuration": s-1});
+				});
+			})
+		}
+	});
     return true;
 });
 
 chrome.runtime.onInstalled.addListener(function() {
+	// Remove in case had own key but re-installing the extension on same device.
+	chrome.storage.local.remove(['apiKey'],function() {
+		var error = chrome.runtime.lastError;
+		if (error) {
+			console.error(error);
+		}
+	})
+
 	chrome.storage.local.set({'heatmap': true, 'normalMarker': false, 'density': 1, 'commentView': true, 'primaryColor': [255, 179, 71], 'liveCommentView': true}, function() {
 		console.log("Default values set!");
 	});
