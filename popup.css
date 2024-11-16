@@ -1,7 +1,7 @@
 body {
-    height: 40px;
-    width: 350px;
-    background-color: #EEEEEE;
+	height: 40px;
+	width: 350px;
+	background-color: #EEEEEE;
 }
 
 .betweenSections {
@@ -165,20 +165,20 @@ input:checked + .circle:before {
 }
 
 .inputToggleContainer {
-    display: flex;
-    align-items: center;
-	justify-content: space-between;
-    width: 100%;
+  display: flex;
+  align-items: center;
+	justify-content: space-evenly;
+	width: 100%;
 }
 
 #apiKeyInput {
-    width: 130px;
-    border: 1px solid #DCDBDB;
-    padding: 5px;
-    border-radius: 5px;
-    outline: none;
+	width: 130px;
+	border: 1px solid #DCDBDB;
+	padding: 5px;
+	border-radius: 5px;
+	outline: none;
 	margin: 10px;
 	flex: 1;
-    width: auto;
-    max-width: 150px;
+	width: auto;
+  max-width: 150px;
 }

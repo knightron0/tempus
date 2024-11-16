@@ -65,18 +65,19 @@
 				</div>
 			</div>
 			<hr class="betweenSections">
-			<div id="apiKeySection">	
+			<div id="apiKeySection" style="height: 7%; margin-top: 7%; margin-bottom: 7%;">	
 				<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
 					<span class="descriptionText">API Key <a href="https://github.com/knightron0/tempus#entering-an-api-key" target="_blank">(optional)</a></span>
 					<div class="inputToggleContainer">
-						<input type="text" id="apiKeyInput" placeholder="Enter API Key">
+						<input type="text" class="apiKeyInput" placeholder="Enter API Key">
 						<label class="switch">
-							<input type="checkbox" id="toggleApiKey">
+							<input type="checkbox" class="toggleApiKey">
 							<span class="circle"></span>
 						</label>
 					</div>
 				</div>
 			</div>
+			<hr class="betweenSections">
 		</div>
 		<div id="otherURL">
 			Tempus is currently only supported on YouTube videos. Please visit a YouTube video to access the settings menu.
@@ -86,6 +87,23 @@
 		</div>
 		<div id="loadingComments">
 			Tempus is loading comments for your YouTube video right now, please wait for a little bit. 
+			<br>
+			<br>
+			If this takes too long, we may have exhausted our API quota. You have the option to <a href="https://github.com/knightron0/tempus#entering-an-api-key" target="_blank">generate your own API key</a> and utilize it here:
+			<div id="apiKeySection" style="height: 7%; margin-top: 7%; margin-bottom: 7%;">	
+				<div style="display: flex; align-items: center; justify-content: space-evenly; width: 100%;">
+					<span class="descriptionText" style="white-space: nowrap;">API Key</span>
+					<div class="inputToggleContainer">
+						<input type="text" class="apiKeyInput" placeholder="Enter API Key">
+						<label class="switch">
+							<input type="checkbox" class="toggleApiKey">
+							<span class="circle"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<hr class="betweenSections">
+
 		</div>
  	</body>
 </html>
