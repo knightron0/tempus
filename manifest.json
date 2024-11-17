@@ -1,6 +1,6 @@
 {
   "name": "Tempus",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A tool that allows you to manage and view YouTube comments with timestamps efficiently.",
   "manifest_version": 3,
   "action":{
@@ -18,8 +18,7 @@
   },
   "permissions": [
     "storage",
-    "tabs",
-    "scripting"
+    "tabs"
   ],
   "host_permissions": [
     "https://www.youtube.com/*"
