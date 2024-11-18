@@ -22,7 +22,7 @@ function editContent(content){
     return ans;
 }
 
-function makeCommentDiv(user, content, timestamp, id, isLive, parity){
+function makeCommentDiv(user, content, timestamp, id, isLive, parity, replies){
     const commentContainer = document.createElement('div');
     commentContainer.style.padding = "10px";
     commentContainer.style.fontSize = "13px";
@@ -80,8 +80,63 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity){
     } else {
         contentContainer.innerHTML = content;
     }
+    
+    // Drop-down arrow for replies
+    const toggleArrow = document.createElement('span');
+    toggleArrow.style.cursor = "pointer";
+    toggleArrow.style.marginLeft = "5px";
+    toggleArrow.style.color = "#ABABAA";
+    toggleArrow.innerHTML = "▼";
+    toggleArrow.onclick = () => {
+        repliesContainer.style.display = repliesContainer.style.display === "none" ? "block" : "none";
+        toggleArrow.innerHTML = repliesContainer.style.display === "none" ? "▼" : "▲";
+        replyCountText.style.display = replyCountText.style.display === "none" ? "inline" : "none";
+    };
+
+    // Reply count
+    const replyCountText = document.createElement('span');
+    if (replies.length == 1) {
+        replyCountText.innerHTML = `${replies.length} reply`;
+    } else {
+        replyCountText.innerHTML = `${replies.length} replies`;
+    }
+    replyCountText.style.color = "#ABABAA";
+    replyCountText.style.fontSize = "12px";
+    replyCountText.style.marginLeft = "5px";
+
+    // Container for replies
+    const repliesContainer = document.createElement('div');
+    repliesContainer.style.display = "none";
+    repliesContainer.style.marginTop = "8px";
+    repliesContainer.style.paddingLeft = "15px";
+    repliesContainer.style.borderLeft = "2px solid #555";
+
+    // Populate replies
+    replies.forEach(reply => {
+        const replyDiv = document.createElement('div');
+        replyDiv.style.marginBottom = "5px";
+        replyDiv.style.color = "#CCCCCC";
+
+        const replyUser = document.createElement('span');
+        replyUser.style.fontWeight = "bold";
+        replyUser.style.color = "#999999";
+        replyUser.innerText = reply.user + ": ";
+
+        const replyText = document.createElement('span');
+        replyText.innerText = reply.text;
+
+        replyDiv.appendChild(replyUser);
+        replyDiv.appendChild(replyText);
+        repliesContainer.appendChild(replyDiv);
+    });
+
     commentContainer.appendChild(username);
     commentContainer.appendChild(contentContainer);
+    if (replies.length > 0) {
+        commentContainer.appendChild(toggleArrow);
+        commentContainer.appendChild(replyCountText);
+        commentContainer.appendChild(repliesContainer);
+    }
     return commentContainer;
 }
 
@@ -171,7 +226,7 @@ function onClickMarker(timestamp){
         for(let j = timestamp; j < timestamp+config.density; j++){
             if(j in commentsTime){
                 for(let i = 0; i < commentsTime[j].length; i++){
-                    let divCommentView = makeCommentDiv(commentsTime[j][i][1], commentsTime[j][i][0], -1, commentsTime[j][i][2], false, i&1);
+                    let divCommentView = makeCommentDiv(commentsTime[j][i][1], commentsTime[j][i][0], -1, commentsTime[j][i][2], false, i&1, commentsTime[timestamp][i][3]);
                     document.getElementById("panelContent").appendChild(divCommentView);
                 }
             }
@@ -273,9 +328,9 @@ function initialize(response){
     for(let i = 0;i<response.length;i++){
         let num = getSeconds(response[i]["time"]);
         if(num in commentsTime){
-            commentsTime[num].push([response[i]["text"], response[i]["user"], response[i]["id"]]);
+            commentsTime[num].push([response[i]["text"], response[i]["user"], response[i]["id"], response[i]["replies"]]);
         } else {
-            commentsTime[num] = [[response[i]["text"], response[i]["user"], response[i]["id"]]];
+            commentsTime[num] = [[response[i]["text"], response[i]["user"], response[i]["id"], response[i]["replies"]]];
         }
     }
     commentsResponse = response;
@@ -395,7 +450,7 @@ vid.ontimeupdate = function() {
                     if (placeholderImg != undefined) {
                         placeholderImg.style.display = 'none';
                     }
-                    divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true, liveContent.getElementsByTagName('div').length & 1);
+                    divCommentView = makeCommentDiv(commentsTime[timestamp][i][1], commentsTime[timestamp][i][0], timestamp, commentsTime[timestamp][i][2], true, liveContent.getElementsByTagName('div').length & 1, commentsTime[timestamp][i][3]);
                     liveContent.appendChild(divCommentView);
                     liveContent.scrollTop = liveContent.scrollHeight;
                 }
