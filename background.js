@@ -54,8 +54,8 @@ function getDuration(vId, apiKey){
 }
 
 function makeUrl(videoId, apiKey, pageToken){
-	const fields = "&fields=items%28snippet%2FtopLevelComment%2Fsnippet%2FtextOriginal%2C%20snippet%2FtopLevelComment%2Fsnippet%2FauthorDisplayName%2Csnippet%2FtopLevelComment%2Fid%29%2CnextPageToken";
-	let url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=";
+	const fields = "&fields=items%28snippet%2FtopLevelComment%2Fsnippet%2FtextOriginal%2Csnippet%2FtopLevelComment%2Fsnippet%2FauthorDisplayName%2Csnippet%2FtopLevelComment%2Fid%2Creplies%2Fcomments%28snippet%2FtextOriginal%2Csnippet%2FauthorDisplayName%29%29%2CnextPageToken";
+	let url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=";
 	url += videoId.toString() + "&maxResults=100" + fields + "&key=" + apiKey.toString();
 	if(pageToken != -1){
 		url += "&pageToken=" + pageToken.toString();
@@ -70,17 +70,29 @@ function filterComments(comments){
 		let user = comments[i]["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
 		let commentId = comments[i]["snippet"]["topLevelComment"]["id"].trim();
 		const allStamps = textContent.match(/[0-9]{0,2}:{0,1}[0-9]{0,2}:[0-9][0-9]\s+/g);
+		let replies = getReplies(comments[i]);
 		if(allStamps != null){
 			const splitContent = textContent.split(new RegExp(/[0-9]{0,2}:{0,1}[0-9]{0,2}:[0-9][0-9]\s+/g));
 			for(var j = 0;j<allStamps.length;j++){
 				if(splitContent[j] == "" || splitContent[j][splitContent[j].length-1] == " "){
-					const timeStamp = {"time": allStamps[j].trim(), "text": textContent, "user": user, "id": commentId};
+					const timeStamp = {"time": allStamps[j].trim(), "text": textContent, "user": user, "id": commentId, "replies": replies};
 					res.push(timeStamp);
 				}
 			}
 		}
 	}
 	return res;
+}
+
+function getReplies(comment) {
+	const replies = []
+	if (comment["replies"] && comment["replies"]["comments"]) {
+		let replyComments = comment["replies"]["comments"];
+		for(var i = 0; i < replyComments.length; i++) { 
+			replies.push({"text": replyComments[i]["snippet"]["textOriginal"], "user": replyComments[i]["snippet"]["authorDisplayName"]})
+		}
+	}
+	return replies;
 }
 
 function fetchComments(vId, apiKey, pageToken){
