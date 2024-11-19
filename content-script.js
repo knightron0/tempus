@@ -104,6 +104,12 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity, replies){
     replyCountText.style.fontSize = "12px";
     replyCountText.style.marginLeft = "5px";
 
+    replyCountText.onclick = () => {
+        repliesContainer.style.display = repliesContainer.style.display === "none" ? "block" : "none";
+        toggleArrow.innerHTML = repliesContainer.style.display === "none" ? "▼" : "▲";
+        replyCountText.style.display = replyCountText.style.display === "none" ? "inline" : "none";
+    };
+
     // Container for replies
     const repliesContainer = document.createElement('div');
     repliesContainer.style.display = "none";
@@ -120,7 +126,7 @@ function makeCommentDiv(user, content, timestamp, id, isLive, parity, replies){
         const replyUser = document.createElement('span');
         replyUser.style.fontWeight = "bold";
         replyUser.style.color = "#999999";
-        replyUser.innerText = reply.user + ": ";
+        replyUser.innerText = reply.user + " ";
 
         const replyText = document.createElement('span');
         replyText.innerText = reply.text;
