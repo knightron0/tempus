@@ -449,7 +449,7 @@ vid.ontimeupdate = function() {
         // Remove comment divs that have timestamps after the currentTimestamp
         const comments = liveContent.getElementsByTagName('div');
         for (let i = comments.length - 1; i >= 0; i--) {
-            const commentTimestamp = parseInt(comments[i].className, 10);
+            const commentTimestamp = parseInt(comments[i].className);
             if (commentTimestamp > currentTimestamp) {
                 liveContent.removeChild(comments[i]);
             }
