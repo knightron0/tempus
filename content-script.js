@@ -436,10 +436,26 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
+// Tracks the last currentTimestamp processed during the previous ontimeupdate event
+let prevTimestamp = -1;
+
 const vid = document.getElementsByClassName("video-stream html5-main-video")[0];
 vid.ontimeupdate = function() {
     const liveContent = document.getElementById("livePanelContent");
     const currentTimestamp = Math.floor(vid.currentTime);
+
+    if (liveContent && currentTimestamp < prevTimestamp) {
+        // Handle backwards scrubbing
+        // Remove comment divs that have timestamps after the currentTimestamp
+        const comments = liveContent.getElementsByTagName('div');
+        for (let i = comments.length - 1; i >= 0; i--) {
+            const commentTimestamp = parseInt(comments[i].className, 10);
+            if (commentTimestamp > currentTimestamp) {
+                liveContent.removeChild(comments[i]);
+            }
+        }
+    }
+
     if(liveContent != undefined && (liveContent.getElementsByTagName('div').length === 0 || liveContent.lastElementChild.className != currentTimestamp.toString()) && config.liveCommentView){
         let prevTime = -1;
         if (liveContent.getElementsByTagName('div').length !== 0) {
@@ -463,6 +479,8 @@ vid.ontimeupdate = function() {
             }
         }
     }
+    // Update prevTimestamp at the end
+    prevTimestamp = currentTimestamp;
 };
 
 let resizeObserver = new ResizeObserver(() => {
