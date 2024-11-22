@@ -319,6 +319,23 @@ function rerender(){
     if(!config.normalMarker) toggleClass("normalMarker");
 }
 
+function updateLiveCommentViewVisibility() {
+    const liveCommentView = document.getElementById("liveCommentView");
+    const hasComments = Object.keys(commentsTime).length > 0;
+
+    if (!hasComments) {
+        // Hide the live comment view
+        if (liveCommentView) {
+            liveCommentView.style.display = "none";
+        }
+    } else {
+        // Show the live comment view if it's enabled in the config
+        if (config.liveCommentView && liveCommentView) {
+            liveCommentView.style.display = "block";
+        }
+    }
+}
+
 function initialize(response){
     freq = {};
     for(let i = 0;i<response.length;i++){
@@ -353,6 +370,9 @@ function initialize(response){
         config.liveCommentView = false;
         chrome.storage.local.set({'liveCommentView': config.liveCommentView}, function() {});
     });
+
+    // When initializing update live comment view visibility
+    updateLiveCommentViewVisibility();
 }
 
 chrome.storage.local.get(['heatmap', 'normalMarker', 'density', 'commentView', 'primaryColor', 'liveCommentView'], function(result) {
@@ -371,6 +391,9 @@ chrome.runtime.sendMessage({getComments: "True"}, function(response) {
     videoDuration = response["videoDuration"];
     response = response["comments"];
     initialize(response);
+
+     // Update live comment view visibility after comments are fetched
+    updateLiveCommentViewVisibility();
 });
 
 chrome.runtime.onMessage.addListener(
@@ -384,6 +407,10 @@ chrome.runtime.onMessage.addListener(
             videoId = request.videoId;
             videoDuration = request.videoDuration;
             initialize(request.comments);
+
+            // Update live comment view visibility after tab update
+            updateLiveCommentViewVisibility();
+
             sendResponse({status: true});
         }
         if(request.toggleHeatmap){
